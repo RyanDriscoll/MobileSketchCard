@@ -11,12 +11,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    height: '100%'
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center'
   },
-  sketch: {
-    width: '100%',
-    height: 250, // Height needed; Default: 200px
-  },
+  imageContainer: {
+    position: 'absolute',
+    top: 20,
+    width: 300,
+    height: 400
+  }
 });
 
 class Frame extends React.Component {
@@ -24,12 +29,15 @@ class Frame extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      drawing: null,
+      drawing: [],
+      erase: false
     };
     this.clear = this.clear.bind(this);
     this.onReset = this.onReset.bind(this);
     this.onSave = this.onSave.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
+    this.undo = this.undo.bind(this);
+    this.toggleDrawErase = this.toggleDrawErase.bind(this);
   }
 
 
@@ -54,8 +62,20 @@ class Frame extends React.Component {
    */
   onSave() {
     this.sketch.saveImage(this.state.drawing)
-      .then((data) => console.log(data))
+      .then((data) => {
+        console.log(data);
+      })
       .catch((error) => console.log(error));
+  }
+
+  undo() {
+    this.sketch.clear();
+    const drawings = this.state.drawing.slice(0, -1);
+    this.setState({drawing: drawings});
+  }
+
+  toggleDrawErase() {
+    this.setState({erase: !this.state.erase});
   }
 
   /**
@@ -63,26 +83,40 @@ class Frame extends React.Component {
    * you'll receive the base64 representation of the drawing as a callback.
    */
   onUpdate(base64Image) {
-    console.log('in update');
-    this.setState({ drawing: base64Image });
+    this.setState({ drawing: this.state.drawing.concat(base64Image) });
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <View style={{position: 'absolute', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-          <Image source={require('../../frame.png')} style={{}} />
+        <View style={styles.imageContainer}>
+          <Image source={require('../../frame.png')} style={{width: '100%'}} />
         </View>
+        {
+          !!this.state.drawing.length && this.state.drawing.map((drawing, i) => {
+            return (
+              <View style={styles.imageContainer} key={i}>
+                <Image
+                  source={{uri: drawing}}
+                  style={{
+                    height: '100%',
+                    width: '100%'
+                  }}
+                />
+              </View>
+            );
+          })
+        }
         <Sketch
           fillColor="transparent"
-          strokeColor="black"
-          strokeThickness={5}
+          strokeColor={this.state.erase ? '#FFF' : '#000'}
+          strokeThickness={10}
           imageType="png"
           onReset={this.onReset}
           onUpdate={this.onUpdate}
           clearButtonHidden={true}
           ref={(sketch) => { this.sketch = sketch; }}
-          style={styles.sketch}
+          style={styles.imageContainer}
         />
         <Button
           onPress={this.clear}
@@ -93,6 +127,15 @@ class Frame extends React.Component {
           onPress={this.onSave}
           title="Save drawing"
         />
+        <Button
+          onPress={this.undo}
+          title="Undo"
+        />
+        <Button
+          onPress={this.toggleDrawErase}
+          title={this.state.erase ? 'Draw' : 'Erase'}
+        />
+
       </View>
     );
   }
