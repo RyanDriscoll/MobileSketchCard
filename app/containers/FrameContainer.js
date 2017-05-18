@@ -1,10 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { ActionCreators } from '../actions';
+
 import {
   Button,
   StyleSheet,
   View,
   Image
 } from 'react-native';
+
+import LayeredImages from '../components/LayeredImages';
+import FrameControl from '../components/FrameControl';
 import Sketch from 'react-native-sketch';
 
 const styles = StyleSheet.create({
@@ -13,23 +20,23 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     display: 'flex',
-    justifyContent: 'flex-end',
     alignItems: 'center'
   },
   imageContainer: {
     position: 'absolute',
     top: 20,
     width: 300,
-    height: 400
+    height: 400,
+    borderWidth: 2
   }
 });
 
-class Frame extends React.Component {
+class FrameContainer extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      drawing: [],
+      images: [],
       erase: false
     };
     this.clear = this.clear.bind(this);
@@ -39,7 +46,6 @@ class Frame extends React.Component {
     this.undo = this.undo.bind(this);
     this.toggleDrawErase = this.toggleDrawErase.bind(this);
   }
-
 
   /**
    * Clear / reset the drawing
@@ -61,7 +67,7 @@ class Frame extends React.Component {
    * once the promise is resolved, containing the path of the image.
    */
   onSave() {
-    this.sketch.saveImage(this.state.drawing)
+    this.sketch.saveImage(this.state.images)
       .then((data) => {
         console.log(data);
       })
@@ -70,8 +76,8 @@ class Frame extends React.Component {
 
   undo() {
     this.sketch.clear();
-    const drawings = this.state.drawing.slice(0, -1);
-    this.setState({drawing: drawings});
+    const images = this.state.images.slice(0, -1);
+    this.setState({images});
   }
 
   toggleDrawErase() {
@@ -83,34 +89,19 @@ class Frame extends React.Component {
    * you'll receive the base64 representation of the drawing as a callback.
    */
   onUpdate(base64Image) {
-    this.setState({ drawing: this.state.drawing.concat(base64Image) });
+    this.setState({ images: this.state.images.concat(base64Image) });
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.imageContainer}>
-          <Image source={require('../../frame.png')} style={{width: '100%'}} />
-        </View>
-        {
-          !!this.state.drawing.length && this.state.drawing.map((drawing, i) => {
-            return (
-              <View style={styles.imageContainer} key={i}>
-                <Image
-                  source={{uri: drawing}}
-                  style={{
-                    height: '100%',
-                    width: '100%'
-                  }}
-                />
-              </View>
-            );
-          })
-        }
+        <LayeredImages
+          images={this.state.images}
+        />
         <Sketch
           fillColor="transparent"
           strokeColor={this.state.erase ? '#FFF' : '#000'}
-          strokeThickness={10}
+          strokeThickness={this.state.erase ? 20 : 10}
           imageType="png"
           onReset={this.onReset}
           onUpdate={this.onUpdate}
@@ -118,28 +109,28 @@ class Frame extends React.Component {
           ref={(sketch) => { this.sketch = sketch; }}
           style={styles.imageContainer}
         />
-        <Button
-          onPress={this.clear}
-          title="Clear drawing"
+        <FrameControl
+          undo={this.undo}
+          clear={this.clear}
+          onSave={this.onSave}
+          toggleDrawErase={this.toggleDrawErase}
+          erase={this.state.erase}
+          images={this.state.images.length > 0}
         />
-        <Button
-          disabled={!this.state.drawing}
-          onPress={this.onSave}
-          title="Save drawing"
-        />
-        <Button
-          onPress={this.undo}
-          title="Undo"
-        />
-        <Button
-          onPress={this.toggleDrawErase}
-          title={this.state.erase ? 'Draw' : 'Erase'}
-        />
-
       </View>
     );
   }
 
 }
 
-export default Frame;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(ActionCreators, dispatch);
+}
+
+function mapStateToProps(state) {
+  return {
+
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FrameContainer);
