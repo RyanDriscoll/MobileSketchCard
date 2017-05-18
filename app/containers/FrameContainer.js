@@ -4,10 +4,8 @@ import { bindActionCreators } from 'redux';
 import { ActionCreators } from '../actions';
 
 import {
-  Button,
   StyleSheet,
-  View,
-  Image
+  View
 } from 'react-native';
 
 import LayeredImages from '../components/LayeredImages';
@@ -76,8 +74,7 @@ class FrameContainer extends React.Component {
 
   undo() {
     this.sketch.clear();
-    const images = this.state.images.slice(0, -1);
-    this.setState({images});
+    this.props.undoImage();
   }
 
   toggleDrawErase() {
@@ -90,13 +87,15 @@ class FrameContainer extends React.Component {
    */
   onUpdate(base64Image) {
     this.setState({ images: this.state.images.concat(base64Image) });
+    this.props.addImage(base64Image);
   }
 
   render() {
+    console.log(this.props);
     return (
       <View style={styles.container}>
         <LayeredImages
-          images={this.state.images}
+          images={this.props.images}
         />
         <Sketch
           fillColor="transparent"
@@ -129,7 +128,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-
+    images: state.default.images
   };
 }
 

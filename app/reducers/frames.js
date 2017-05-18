@@ -1,53 +1,46 @@
-import {ADD_PATHS, SELECT_GAME } from '../constants';
+import {
+  ADD_IMAGE,
+  UNDO_IMAGE
+} from '../constants';
 
 const initialState = {
-    home: {
-      1: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    },
-    away: {
-      1: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    }
-    // 2: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 3: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 4: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 5: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 6: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 7: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 8: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 9: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 10: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 11: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 12: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 13: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 14: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 15: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 16: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 17: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 18: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 19: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
-    // 20: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
+    // home: {
+    //   1: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
+    // },
+    // away: {
+    //   1: {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []},
+    // },
+    images: []
 };
 
 export default function (state = initialState, action) {
-  const newState = Object.assign({}, state);
   switch (action.type) {
-    // case ADD_INNING:
 
-    case ADD_PATHS:
-      if (!newState[action.team][action.x]) {
-        newState[action.team][action.x] = {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []};
-      }
-      newState[action.team][action.x] = Object.assign({}, newState[action.team][action.x], {
-          [action.y]: newState[action.team][action.x][action.y].concat(action.paths)
-        });
-      break;
+    case ADD_IMAGE:
+      return Object.assign({}, state, {
+        images: [
+          ...state.images,
+          action.image
+        ]
+      });
+    case UNDO_IMAGE:
+      return Object.assign({}, state, {
+        images: state.images.slice(0, -1)
+      });
+    // case ADD_PATHS:
+    //   if (!newState[action.team][action.x]) {
+    //     newState[action.team][action.x] = {1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: []};
+    //   }
+    //   newState[action.team][action.x] = Object.assign({}, newState[action.team][action.x], {
+    //       [action.y]: newState[action.team][action.x][action.y].concat(action.paths)
+    //     });
+    //   break;
 
-    case SELECT_GAME:
-      return initialState;
-      break;
+    // case SELECT_GAME:
+    //   return initialState;
+    //   break;
 
     default:
       return state;
   }
-  return newState;
 }
