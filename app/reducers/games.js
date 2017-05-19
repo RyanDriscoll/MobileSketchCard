@@ -1,12 +1,14 @@
 import {
   RECEIVE_GAMES,
   RECEIVE_ROSTERS,
-  SELECT_GAME
+  SELECT_GAME,
+  SELECT_TEAM
 } from '../constants';
 
 const initialState = {
   games: [],
   selectedGame: {},
+  selectedTeam: 'away',
   homeRoster: [],
   awayRoster: []
 };
@@ -26,9 +28,13 @@ export default function (state = initialState, action) {
       });
 
     case SELECT_GAME:
-    console.log('in reducer', action.game);
       return Object.assign({}, state, {
         selectedGame: Object.assign({}, action.game)
+      });
+
+    case SELECT_TEAM:
+      return Object.assign({}, state, {
+        selectedTeam: action.selectedTeam
       });
     default:
       return state;

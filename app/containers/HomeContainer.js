@@ -26,6 +26,7 @@ class HomeContainer extends Component {
                 game={game}
                 key={`${game.homeId + game.awayId + game.time}`}
                 selectGame={this.props.selectGame}
+                getRosters={this.props.getRosters}
                 navigate={navigate}
               />
             );

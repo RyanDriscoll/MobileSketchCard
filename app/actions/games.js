@@ -3,7 +3,8 @@ import axios from 'axios';
 import {
   RECEIVE_GAMES,
   RECEIVE_ROSTERS,
-  SELECT_GAME
+  SELECT_GAME,
+  SELECT_TEAM
 } from '../constants';
 
 export const getGames = () => {
@@ -46,6 +47,15 @@ export const selectGame = game => {
     dispatch({
       type: SELECT_GAME,
       game
+    });
+  };
+};
+
+export const selectTeam = team => {
+  return dispatch => {
+    dispatch({
+      type: SELECT_TEAM,
+      team
     });
   };
 };

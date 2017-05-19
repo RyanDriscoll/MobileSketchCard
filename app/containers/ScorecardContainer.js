@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { StackNavigator } from 'react-navigation';
 import { ActionCreators } from '../actions';
+import BattersContainer from './BattersContainer';
+import ToggleTeam from '../components/ToggleTeam';
 
 import { Text, StyleSheet, View } from 'react-native';
 
@@ -11,12 +13,15 @@ class ScorecardContainer extends Component {
     super(props);
   }
   componentDidMount() {
-    this.props.getRosters;
   }
   render() {
     return (
       <View>
-        <Text>ScorecardContainer text</Text>
+        <ToggleTeam
+          game={this.props.selectedGame}
+          selectTeam={this.props.selectTeam}
+        />
+        <BattersContainer />
       </View>
     );
   }
@@ -28,7 +33,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    games: state.default.games
+    selectedGame: state.default.selectedGame
   };
 }
 

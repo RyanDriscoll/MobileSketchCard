@@ -5,6 +5,7 @@ export default function Game(props) {
   const game = props.game;
 
   function handleClick() {
+    props.getRosters(game);
     props.selectGame(game);
     props.navigate('Scorecard');
   }
