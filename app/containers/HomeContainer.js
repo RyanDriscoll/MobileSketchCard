@@ -15,8 +15,16 @@ class HomeContainer extends Component {
     this.props.getGames();
   }
   render() {
+    console.log(this.props);
+    const games = this.props.games;
     return (
-      <View />
+      <View>
+        {
+          !!games.length && games.map(game => {
+            return <Game game={game} key={game.homeId} />;
+          })
+        }
+      </View>
     );
   }
 }
@@ -26,7 +34,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    games: state.default.games
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);
