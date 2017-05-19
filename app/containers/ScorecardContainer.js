@@ -3,33 +3,20 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { StackNavigator } from 'react-navigation';
 import { ActionCreators } from '../actions';
-import Game from '../components/Game';
 
 import { Text, StyleSheet, View } from 'react-native';
 
-class HomeContainer extends Component {
+class ScorecardContainer extends Component {
   constructor(props) {
     super(props);
   }
   componentDidMount() {
-    this.props.getGames();
+    this.props.getRosters;
   }
   render() {
-    const games = this.props.games;
-    const { navigate } = this.props.navigation;
     return (
       <View>
-        {!!games.length &&
-          games.map(game => {
-            return (
-              <Game
-                game={game}
-                key={`${game.homeId + game.awayId + game.time}`}
-                selectGame={this.props.selectGame}
-                navigate={navigate}
-              />
-            );
-          })}
+        <Text>ScorecardContainer text</Text>
       </View>
     );
   }
@@ -45,4 +32,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ScorecardContainer);

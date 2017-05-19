@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { StackNavigator } from 'react-navigation';
 import { ActionCreators } from '../actions';
 import HomeContainer from './HomeContainer';
+import ScorecardContainer from './ScorecardContainer';
 
 import {
   Text,
@@ -18,13 +19,14 @@ class AppContainer extends Component {
 
   render() {
    return (
-      <HomeContainer />
+      <HomeContainer navigation={this.props.navigation} />
     );
   }
 }
 
-const Home = StackNavigator({
+const App = StackNavigator({
   Home: { screen: AppContainer },
+  Scorecard: { screen: ScorecardContainer }
 });
 
 function mapDispatchToProps(dispatch) {
@@ -37,4 +39,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

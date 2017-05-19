@@ -1,15 +1,17 @@
 import React from 'react';
-import {
-  Button,
-  StyleSheet,
-  View
-} from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 
 export default function Game(props) {
   const game = props.game;
+
+  function handleClick() {
+    props.selectGame(game);
+    props.navigate('Scorecard');
+  }
+
   return (
     <Button
-      onPress={() => console.log('clicked')}
+      onPress={handleClick}
       title={`${game.awayName} vs. ${game.homeName}`}
     />
   );
