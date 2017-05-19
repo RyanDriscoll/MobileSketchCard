@@ -12,7 +12,8 @@ class BattersContainer extends Component {
   constructor(props) {
     super(props);
   }
-  renderBatters() {
+
+  render() {
     const batters = [];
     let roster = this.props.selectedTeam === 'away'
       ? this.props.awayRoster
@@ -20,12 +21,9 @@ class BattersContainer extends Component {
     for (let i = 1; i <= 9; i++) {
       batters.push(<Batter order={i} key={i} roster={roster} />);
     }
-    return batters;
-  }
-  render() {
     return (
       <View>
-        {this.renderBatters()}
+        { batters }
       </View>
     );
   }

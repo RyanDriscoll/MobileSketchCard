@@ -34,7 +34,7 @@ export default function (state = initialState, action) {
 
     case SELECT_TEAM:
       return Object.assign({}, state, {
-        selectedTeam: action.selectedTeam
+        selectedTeam: action.team
       });
     default:
       return state;

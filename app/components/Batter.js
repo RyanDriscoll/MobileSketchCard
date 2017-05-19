@@ -1,11 +1,17 @@
 import React from 'react';
 import { Button, StyleSheet, View, Picker } from 'react-native';
 
+var styles = StyleSheet.create({
+  picker: {
+    height: 100,
+  },
+});
+
 export default function Batter(props) {
 
   function renderPicker() {
     return (
-      <Picker>
+      <Picker style={styles.picker}>
         {
           props.roster.map(player => {
             return (
