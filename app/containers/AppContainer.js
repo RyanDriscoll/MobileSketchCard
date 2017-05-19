@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { StackNavigator } from 'react-navigation';
 import { ActionCreators } from '../actions';
 import FrameContainer from './FrameContainer';
 
@@ -21,6 +22,10 @@ class AppContainer extends Component {
   }
 }
 
+const Home = StackNavigator({
+  Home: { screen: AppContainer },
+});
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(ActionCreators, dispatch);
 }
@@ -31,4 +36,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

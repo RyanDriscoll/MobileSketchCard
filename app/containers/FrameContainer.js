@@ -34,7 +34,6 @@ class FrameContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      images: [],
       erase: false
     };
     this.clear = this.clear.bind(this);
@@ -49,7 +48,9 @@ class FrameContainer extends React.Component {
    * Clear / reset the drawing
    */
   clear() {
-    this.sketch.clear();
+    for (let i = 0; i < this.props.images.length; i++) {
+      this.props.undoImage();
+    }
   }
 
   /**
@@ -73,7 +74,6 @@ class FrameContainer extends React.Component {
   }
 
   undo() {
-    this.sketch.clear();
     this.props.undoImage();
   }
 
@@ -86,12 +86,11 @@ class FrameContainer extends React.Component {
    * you'll receive the base64 representation of the drawing as a callback.
    */
   onUpdate(base64Image) {
-    this.setState({ images: this.state.images.concat(base64Image) });
     this.props.addImage(base64Image);
+    this.sketch.clear();
   }
 
   render() {
-    console.log(this.props);
     return (
       <View style={styles.container}>
         <LayeredImages
@@ -114,7 +113,7 @@ class FrameContainer extends React.Component {
           onSave={this.onSave}
           toggleDrawErase={this.toggleDrawErase}
           erase={this.state.erase}
-          images={this.state.images.length > 0}
+          images={this.props.images.length > 0}
         />
       </View>
     );
